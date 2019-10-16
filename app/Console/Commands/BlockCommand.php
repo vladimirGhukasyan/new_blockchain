@@ -50,16 +50,9 @@ class BlockCommand extends Command
             while ($message = yield $connection->receive()) {
                 /** @var Message $message */
                 $payload = yield $message->buffer();
-//
+                $data = json_decode($payload)->x;
 
-//                $resp = json_decode($payload)->x;
-//                $data = [
-//                    'transaction_id' => $resp->hash,
-//                    'inputs' => count($resp->inputs),
-//                    'outputs' => count($resp->out),
-//                    'size' => $resp->size,
-//                ];
-                event(new \App\Events\NewBlockEvent($payload));
+                event(new \App\Events\NewBlockEvent($data));
 
                 dump(json_decode($payload));
                 if ($payload === "Goodbye!") {
