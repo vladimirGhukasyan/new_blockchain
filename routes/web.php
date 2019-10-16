@@ -20,3 +20,6 @@ Route::get('/home',function (){
     return view('home');
 })->name('home');
 
+Route::get('/call-event', function () {
+
+})->name('call.event');

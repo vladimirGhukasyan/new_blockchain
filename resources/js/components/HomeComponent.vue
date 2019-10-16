@@ -7,31 +7,28 @@
 
 
                     </h2>
-                    <h5 style="text-align:center">
+                    <h5 style="text-align:center" v-if="!block">
                         <div class="spinner-border text-secondary" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
                         Waiting
                     </h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped" v-if="block">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Hash</th>
 
-                    <table class="table table-striped" v-if="block.length>0">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>Transaction id</th>
-                            <th>Inputs</th>
-                            <th>Outputs</th>
-                            <th>Size</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!--<tr v-for="transaction in transactions">-->
-                        <!--<td>{{transaction.transaction_id}}</td>-->
-                        <!--<td>{{transaction.inputs}}</td>-->
-                        <!--<td>{{transaction.outputs}}</td>-->
-                        <!--<td>{{transaction.size}}</td>-->
-                        <!--</tr>-->
-                        </tbody>
-                    </table>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{block.hash}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
                  <hr>
                 <div class="card-body">
@@ -70,7 +67,7 @@
 
             return {
                 transactions: [],
-                block: []
+                block: ''
             }
         },
         mounted() {
@@ -82,11 +79,18 @@
                     }
                 }).listen('NewBlockEvent', (resp) => {
 
-                this.block = resp;
 
-                console.log(resp)
+                this.block = resp.block;
+
+                console.log(this.block)
             });
         },
-        methods: {}
+        methods: {
+            ss: function () {
+              axios.get('/call-event').then(()=>{
+
+              })
+            }
+        }
     }
 </script>

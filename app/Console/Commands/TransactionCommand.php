@@ -52,13 +52,8 @@ class TransactionCommand extends Command
 //
 
                 $resp = json_decode($payload)->x;
-                $data = [
-                    'transaction_id' => $resp->hash,
-                    'inputs' => count($resp->inputs),
-                    'outputs' => count($resp->out),
-                    'size' => $resp->size,
-                ];
-                event(new \App\Events\NewTransactionEvent($data));
+
+                event(new \App\Events\NewTransactionEvent($resp));
 
                 dump(json_decode($payload)->x->hash);
                 if ($payload === "Goodbye!") {

@@ -41,6 +41,7 @@ class BlockCommand extends Command
     public function handle()
     {
 
+
         \Amp\Loop::run(function () {
             /** @var Connection $connection */
             $connection = yield Websocket\connect('wss://ws.blockchain.info/inv');
