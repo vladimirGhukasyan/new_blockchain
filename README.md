@@ -10,8 +10,19 @@ Step 1
     
 Step 2
 
+
   change in .env BROADCAST_DRIVER=redis
+  
+  
+  
+  
   php artisan key:generate
+  
+  
+  
+  
+  
+  
   then run  php artisan migrate
   
 Step 3
