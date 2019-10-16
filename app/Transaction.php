@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     protected $fillable = [
-        'size', 'time', 'hash','inputs','outputs','tx_index'
+        'size', 'time', 'hash','inputs','outputs','tx_index','input_value','output_value','wallets'
     ];
 }

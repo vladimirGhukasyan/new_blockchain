@@ -54,13 +54,38 @@ class TransactionCommand extends Command
 
                 $resp = json_decode($payload)->x;
 
+                $input_value = 0;
+                $input_wallets = [];
+
+                foreach ($resp->inputs as $item){
+
+                    $input_value +=  $item->prev_out->value;
+                    array_push($input_wallets,$item->prev_out->addr);
+                }
+
+                $output_value = 0;
+                $output_wallets = [];
+
+                foreach ($resp->out as $item){
+
+                    $output_value +=  $item->value;
+                    array_push($output_wallets,$item->addr);
+                }
+
+
                 Transaction::create([
                     'size' => $resp->size,
                     'time' => $resp->time,
                     'tx_index' => $resp->tx_index,
                     'hash' => $resp->hash,
                     'inputs' => count($resp->inputs),
-                    'outputs' => count($resp->out)
+                    'outputs' => count($resp->out),
+                    'input_value' => $input_value,
+                    'output_value' => $output_value,
+                    'wallets' => json_encode([
+                        'input'=> $input_wallets,
+                        'output'=> $output_wallets,
+                    ])
                 ]);
 
                 dump(json_decode($payload)->x->hash);
