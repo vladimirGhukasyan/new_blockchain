@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Transaction;
 use Illuminate\Console\Command;
 use Amp\Delayed;
-use Amp\Websocket\Message;
 use Amp\Websocket;
 
 class TransactionCommand extends Command
@@ -42,27 +42,29 @@ class TransactionCommand extends Command
     {
 
         \Amp\Loop::run(function () {
-            /** @var Connection $connection */
+
             $connection = yield Websocket\connect('wss://ws.blockchain.info/inv');
+
             yield $connection->send('{"op" : "unconfirmed_sub"}');
+
             $i = 0;
+
             while ($message = yield $connection->receive()) {
-                /** @var Message $message */
                 $payload = yield $message->buffer();
-//
 
                 $resp = json_decode($payload)->x;
 
-                $data = [
-                    'transaction_id' => $resp->hash,
-                    'inputs' => count($resp->inputs),
-                    'outputs' => count($resp->out),
+                Transaction::create([
                     'size' => $resp->size,
-                ];
-
-                event(new \App\Events\NewTransactionEvent($data));
+                    'time' => $resp->time,
+                    'tx_index' => $resp->tx_index,
+                    'hash' => $resp->hash,
+                    'inputs' => count($resp->inputs),
+                    'outputs' => count($resp->out)
+                ]);
 
                 dump(json_decode($payload)->x->hash);
+
                 if ($payload === "Goodbye!") {
                     $connection->close();
                     break;

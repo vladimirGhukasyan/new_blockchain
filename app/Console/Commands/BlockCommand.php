@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Amp\Delayed;
 use Amp\Websocket\Message;
 use Amp\Websocket;
+use App\Block;
 
 class BlockCommand extends Command
 {
@@ -43,18 +44,30 @@ class BlockCommand extends Command
 
 
         \Amp\Loop::run(function () {
-            /** @var Connection $connection */
+
             $connection = yield Websocket\connect('wss://ws.blockchain.info/inv');
             yield $connection->send('{"op" : "blocks_sub"}');
             $i = 0;
             while ($message = yield $connection->receive()) {
-                /** @var Message $message */
+
                 $payload = yield $message->buffer();
+
                 $data = json_decode($payload)->x;
 
-                event(new \App\Events\NewBlockEvent($data));
+                Block::create([
+                    'size' => $data->size,
+                    'time' => $data->time,
+                    'blockIndex' =>$data->blockIndex,
+                    'prevBlockIndex' =>$data->prevBlockIndex,
+                    'hash' => $data->hash,
+                    'mrklRoot' => $data->mrklRoot,
+                    "totalBTCSent" => $data->totalBTCSent,
+                    "estimatedBTCSent" => $data->estimatedBTCSent,
+                ]);
+
 
                 dump(json_decode($payload));
+
                 if ($payload === "Goodbye!") {
                     $connection->close();
                     break;

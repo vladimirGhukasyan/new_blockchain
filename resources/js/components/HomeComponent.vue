@@ -18,12 +18,11 @@
                             <thead class="thead-light">
                             <tr>
                                 <th>Hash</th>
-
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>{{block.hash}}</td>
+                                <td><a href="#" data-toggle="modal" data-target="#blockModal">{{block.hash}}</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -40,34 +39,93 @@
                                 <th>Transaction id</th>
                                 <th>Inputs</th>
                                 <th>Outputs</th>
+                                <th>Time</th>
                                 <th>Size</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="transaction in transactions">
-                                <td>{{transaction.transaction_id}}</td>
+                                <td>{{transaction.hash}}</td>
                                 <td>{{transaction.inputs}}</td>
                                 <td>{{transaction.outputs}}</td>
+                                <td>{{ transaction.time | moment("ll h:mm:ss a") }}</td>
                                 <td>{{transaction.size}}</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
+        </div>
+        <div class="modal fade" id="blockModal" ref="blockModal" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Block</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row w-100">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th> size</th>
+                                        <td>{{ block.size }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th> totalBTCSent</th>
+                                        <td>{{ block.totalBTCSent }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th> estimatedBTCSent</th>
+                                        <td>{{ block.estimatedBTCSent }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th> blockIndex</th>
+                                        <td>{{ block.blockIndex }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th> mrklRoot</th>
+                                        <td>{{ block.mrklRoot }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th> hash</th>
+                                        <td>{{ block.hash }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th> prevBlockIndex</th>
+                                        <td>{{ block.prevBlockIndex }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
 
 <script>
+
+
     export default {
 
         data() {
 
             return {
                 transactions: [],
-                block: ''
+                block: '',
             }
         },
         mounted() {
@@ -83,12 +141,5 @@
                 this.block = resp.block;
             });
         },
-        methods: {
-            ss: function () {
-                axios.get('/call-event').then(() => {
-
-                })
-            }
-        }
     }
 </script>

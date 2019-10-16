@@ -17,8 +17,10 @@ class CreateTransactionsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('size')->nullable();
             $table->integer('time')->nullable();
-            $table->double('total_output',8)->nullable();
-            $table->text('script')->nullable();
+            $table->string('hash')->nullable();
+            $table->integer('inputs')->nullable();
+            $table->integer('outputs')->nullable();
+            $table->integer('tx_index')->nullable();
             $table->timestamps();
         });
     }
