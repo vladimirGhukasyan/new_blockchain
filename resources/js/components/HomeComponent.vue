@@ -30,7 +30,7 @@
                     </div>
 
                 </div>
-                 <hr>
+                <hr>
                 <div class="card-body">
                     <h2 style="text-align:center;color:#1d68a7">Latest transactions</h2>
                     <div class="table-responsive">
@@ -77,19 +77,17 @@
                     if (this.transactions.length > 5) {
                         this.transactions.pop();
                     }
+                    console.log(resp)
+
                 }).listen('NewBlockEvent', (resp) => {
-
-
                 this.block = resp.block;
-
-                console.log(this.block)
             });
         },
         methods: {
             ss: function () {
-              axios.get('/call-event').then(()=>{
+                axios.get('/call-event').then(() => {
 
-              })
+                })
             }
         }
     }
